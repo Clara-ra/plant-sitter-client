@@ -1,0 +1,21 @@
+.hero {
+    display: flex;
+    flex-direction: row;
+    align-items:flex-start;
+    justify-content: space-between;
+}
+
+.btn-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.issue {
+    color: orange;
+    font-style: bold;
+}
+
+.location {
+    font-style: italic;
+}
