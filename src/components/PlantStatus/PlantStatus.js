@@ -14,7 +14,7 @@ const PlantStatus = ({ plant, updatePlant }) => {
 
   //grab one plant from the server using the given ID
   const fetchPlant = async (id) => {
-    const res = await fetch(`https://plant-monitor-22.herokuapp.com/${id}`)
+    const res = await fetch(`${process.env.REACT_APP_API_URL}${id}`)
     const data = await res.json()
     console.log(`name: ${data.plantName} location: ${data.location} issue: ${data.issue}`)
     return data

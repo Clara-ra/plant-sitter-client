@@ -27,7 +27,7 @@ const Edit = ( { plant, updatePlant, closeEdit }) => {
         console.log(editedPlant)
         // send the request
         const id = params.id.toString()
-        await fetch(`https://plant-monitor-22.herokuapp.com/editPlant/${id}`, {
+        await fetch(`${process.env.REACT_APP_API_URL}editPlant/${id}`, {
             method: "PUT",
             body: JSON.stringify(editedPlant),
             headers: {

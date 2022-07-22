@@ -22,7 +22,7 @@ const ChartArea = ( {plant} ) => {
     const id = params.id.toString()
 
     const fetchPlantData = async () => {
-        const res = await fetch(`https://plant-monitor-22.herokuapp.com/plant/${id}`)
+        const res = await fetch(`${process.env.REACT_APP_API_URL}plant/${id}`)
         const data = res.json()
         return data
     }
@@ -53,7 +53,6 @@ const ChartArea = ( {plant} ) => {
     useEffect( () => {
         const getPlantData = async () => {
             const rawDataPoints = await fetchPlantData()
-            console.log('rawData:', rawDataPoints)
             setplantData(rawDataPoints)
         }
         getPlantData()

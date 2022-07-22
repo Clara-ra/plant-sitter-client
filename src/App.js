@@ -3,6 +3,7 @@ import Home from './components/Home/Home'
 import PlantStatus from './components/PlantStatus/PlantStatus'
 import {  Routes, Route, useNavigate } from 'react-router-dom'
 
+
 function App() {
   const navigate = useNavigate()
   const [plants, updatePlants] = useState( [])
@@ -26,7 +27,7 @@ function App() {
 
   //grab plants from the server
   const fetchPlants = async () => {
-    const res = await fetch('https://plant-monitor-22.herokuapp.com/')
+    const res = await fetch(`${process.env.REACT_APP_API_URL}`)
     const data = await res.json()
     return data
   }

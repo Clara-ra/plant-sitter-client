@@ -3,7 +3,6 @@ import Chart from 'chart.js/auto'
 
 const PlantGraph = ( {chartData, options} ) => {
 
-  console.log('plant graph data and options...',chartData, options)
   return (
     <div>
       <Line       
