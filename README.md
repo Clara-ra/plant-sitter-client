@@ -1,70 +1,85 @@
-# Getting Started with Create React App
+# Plant Monitor - Front-End
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is an application that monitors the temperature, humidity, light intensity, and soil moisture conditions for your plants. The data can be easily viewed, allowing you to notice any patterns that may be helping or hindering your plants. 
 
-## Available Scripts
+![](plant-monitor.gif)
 
-In the project directory, you can run:
+# Setting up project
 
-### `npm start`
+This is a full-stack web application that is broken up across a few different repositories.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
+This repository is the **front-end portion**. To grab the rest, see below.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+React must be setup to run the client. It uses an environment variable to define the server's URL. To adjust the this URL, edit the .env file in the root folder -
 
-### `npm test`
+```
+REACT_APP_API_URL = http://localhost:8000
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+By default, it is set to listen at port 8000, as the server starts running here by default. Change this as needed.
 
-### `npm run build`
+The client can be started by running the following -
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`npm start`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+However, the client alone is not enough. The back-end must be set up as well.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
+For the **back-end portion**, go [here.](https://github.com/Clara-ra/plant-sitter-api)
 
-### `npm run eject`
+Node is neccessary to set up the back-end. Once cloned, make sure to install the neccessary packages -
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+`npm install`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Before the server can be run, an environment file needs to be set up. under config, create a ".env" file -
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+`touch config/.env`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This server relies on using MongoDB. In your environment file, store your connectionURI in the DB_STRING variable.
+You can also set your port in this file. Keep in mind that your client needs to know what the server's URL is. I use port 8000, but you can set it to be whatever you want -
 
-## Learn More
+```
+DB_STRING = connectionURI-here
+PORT = 8000
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To create the data used by the database, data collection needs to be set up as well.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+For the **data collection**, go [here.](https://github.com/Clara-ra/plant-sitter-data-collection) **TBD Repository not uploaded currently**
 
-### Code Splitting
+The data collection is run on a raspberry pi with various sensors connected.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**Hardware used** 
+- BH1750 Light Sensor
+- HTU31 Temperature and Humidity Sensor
+- Capacitive Moisture Sensor
+- PCF8591 (For Analog to Digital Conversion. Not neccessary if all three sensors have digital output.)
+- Raspberry Pi 4b with Python3 installed.
 
-### Analyzing the Bundle Size
+**Software needed**
+- Circuit Python( Setup [here](https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi))
+- BH1750 Module ( Repository [here](https://github.com/adafruit/Adafruit_CircuitPython_BH1750) )
+- HTU21D Module ( Repository [here](https://github.com/adafruit/Adafruit_CircuitPython_HTU21D) )
+- PCF8591 Module ( Resporistory [here](https://github.com/adafruit/Adafruit_CircuitPython_PCF8591) )
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## How It's Made:
 
-### Making a Progressive Web App
+**Tech used:** React, Node, Express, MongoDB, Javascript, Python, CSS
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+This is application is implemented using a MERN stack, as well as python for the data-collection.
+The data-collection is performed using a raspberry pi with various i2c sensors connected. These sensors read the light, humidity, temperature, and moisture. Upon starting up the python client, it will send a request to the sever for the current list of plants registered in the database. This list is provided to the user so they can select the plant that is undergoing data-collection. The user can also register a new plant, or edit existing plants. These actions are sent as requests to the server. Once the user selects a plant, the plant ID for the plant is saved so it can be included in future data packets. The raspberry pi will begin to collect data. Every hour the raspberry pi will read the output of each sensor and send over these datapoints as post requests to the server.
 
-### Advanced Configuration
+The server utilizes Node and Express. It listens for any requests coming from the data collector as well as the React client. Using mongoose, the server defines two schemas - one for plants, and one for plant datapoints. It provides several endpoints, allowing clients to add new plants to the database, update them, and retrive their information. It can also add/retrieve datapoints for a specified plant ID. These items are retrieved from the database.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+My instance of the database is hosted on MongoDB Atlas so that it can be accessed from anywhere. It has two collections - a plant collection, and a plantStatus collection. The plants contain the name of the plant, the location of the plant, and any potential issues the plant may be experiencing. The plantStatus collection is comprised of datapoints. Each datapoint contains a timestamp, lux reading, temperature, humidity, moisture reading, and a reference to the ID of the plant the data is associated with. 
 
-### Deployment
+The client is bootstapped with [React](https://github.com/facebook/create-react-app). It fetches the list of plants from the server and displays them. This list is kept as a state within the App component. When a plant is clicked, the selected plant is also stored within a state for easy reference later. The client sends a request for all datapoints associated with the plant, and the data is displayed using chart.js. The various fetches made to the server are kept in react hooks such as useEffect to ensure they are triggered at the right time (e.g. initial page load).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Optimizations
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+In the future I would like to implement a more graceful shutdown procedure for the server. Currently, there  is none. Upon getting a kill signal, I'd like my server to stop receiving requests, handle the any requests that managed to slip through, and shutdown.  
+I'd also like to implement more robust error handling. The server should have custom errors to handle operational errors such as failing to connect to the databade, invalid user input, and timeouts. When a programming error occurs, the server should be gracefully restarted so that it can continue to recieve requests.
+The data-collector should also be more robust to outlier readings. Instead of just using the first datapoint that is read from the sensor, I should take 5 readings within a short span, and compare them. These values should be more or less equivalent, otherwise that could indicate a sensor issue that I would like to flag for future viewing. This would also allow me to throw away any invalid datapoints. 
+On the client side, instead of displaying graphs I would like to display the most recently read values. Then if the user would like, they can see the graphs. The timeframe for the graphs should be adjustable as well.
