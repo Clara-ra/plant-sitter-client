@@ -56,7 +56,7 @@ The data collection is run on a raspberry pi with various sensors connected.
 - HTU31 Temperature and Humidity Sensor
 - Capacitive Moisture Sensor
 - PCF8591 (For Analog to Digital Conversion. Not neccessary if all three sensors have digital output.)
-- Raspberry Pi 4b with Python3 installed.
+- Raspberry Pi 4b with Python3 installed and connected to the internet.
 
 **Software needed**
 - Circuit Python( Setup [here](https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi))
@@ -64,6 +64,27 @@ The data collection is run on a raspberry pi with various sensors connected.
 - HTU21D Module ( Repository [here](https://github.com/adafruit/Adafruit_CircuitPython_HTU21D) )
 - PCF8591 Module ( Resporistory [here](https://github.com/adafruit/Adafruit_CircuitPython_PCF8591) )
 
+**Hardware Setup**
+
+The  HTU31, BH1750, and PCF8591 sensors all use i2c communication. Thus, these can be connected to eachother. The Capasitive Moisture sensor connects to PCF8591, as it outputs the analog. I used the following setup :
+
+```mermaid
+graph TD;
+    Moisture_Sensor--Aout to A0 Vcc to Vcc Gnd to Gnd-->PCF8591;
+    PCF8591--SCL to SCL SDA to SDA Vcc to Vcc Gnd to Gnd-->HTU31;
+    HTU31--SCL to SCL SDA to SDA Vcc to Vcc Gnd to Gnd-->BH1750;
+    BH1750--SCL to SCL SDA to SDA Vcc to Vcc Gnd to Gnd-->Raspberry_Pi;
+```
+
+**Software Setup**
+
+Download the software listed above. Then the environment must be setup to ensure the client can access the server.
+
+To begin data collection, run the following -
+
+`python client.py`
+
+Follow the prompts that appear.
 ## How It's Made:
 
 **Tech used:** React, Node, Express, MongoDB, Javascript, Python, CSS
