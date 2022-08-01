@@ -6,7 +6,7 @@ This is an application that monitors the temperature, humidity, light intensity,
 
 # Setting up project
 
-This is a full-stack web application that is broken up across a few different repositories.
+This is a full-stack web application that is broken up across a few different repositories - the [front-end,](https://github.com/Clara-ra/plant-sitter-client) the [back-end,](https://github.com/Clara-ra/plant-sitter-api) and the [data-collection.](https://github.com/Clara-ra/plant-sitter-api)
 
 ---
 This repository is the **front-end portion**. To grab the rest, see below.
@@ -47,7 +47,7 @@ PORT = 8000
 To create the data used by the database, data collection needs to be set up as well.
 
 ---
-For the **data collection**, go [here.](https://github.com/Clara-ra/plant-sitter-data-collection) **TBD Repository not uploaded currently**
+For the **data collection**, go [here.](https://github.com/Clara-ra/plant-sitter-data-collection)
 
 The data collection is run on a raspberry pi with various sensors connected.
 
@@ -62,7 +62,7 @@ The data collection is run on a raspberry pi with various sensors connected.
 - Circuit Python( Setup [here](https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi))
 - BH1750 Module ( Repository [here](https://github.com/adafruit/Adafruit_CircuitPython_BH1750) )
 - HTU21D Module ( Repository [here](https://github.com/adafruit/Adafruit_CircuitPython_HTU21D) )
-- PCF8591 Module ( Resporistory [here](https://github.com/adafruit/Adafruit_CircuitPython_PCF8591) )
+- PCF8591 Module ( Respository [here](https://github.com/adafruit/Adafruit_CircuitPython_PCF8591) )
 
 **Hardware Setup**
 
@@ -78,11 +78,16 @@ graph TD;
 
 **Software Setup**
 
-Download the software listed above. Then the environment must be setup to ensure the client can access the server.
+Download the software listed above. Then the environment must be setup to ensure the client can access the server. Create a .env under the root folder - 
+
+```
+SERVER_URL=url_here
+```
+Once your environment file and hardware are setup, you are ready to begin collection.
 
 To begin data collection, run the following -
 
-`python client.py`
+`python main.py`
 
 Follow the prompts that appear.
 ## How It's Made:
